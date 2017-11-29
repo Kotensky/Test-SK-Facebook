@@ -58,7 +58,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.AlbumViewH
         return albumEntities.size();
     }
 
-    public class AlbumViewHolder extends RecyclerView.ViewHolder {
+    class AlbumViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.album_name_txt)
         TextView name;
@@ -67,7 +67,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.AlbumViewH
         @BindView(R.id.album_cover_photo_img)
         ImageView img;
 
-        public AlbumViewHolder(View itemView) {
+        AlbumViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

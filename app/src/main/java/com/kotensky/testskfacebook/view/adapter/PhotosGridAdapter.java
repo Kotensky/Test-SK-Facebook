@@ -13,22 +13,24 @@ import com.kotensky.testskfacebook.R;
 import com.kotensky.testskfacebook.listeners.OnRecyclerItemClickListener;
 import com.kotensky.testskfacebook.model.data.AlbumEntity;
 import com.kotensky.testskfacebook.model.data.ImageEntity;
+import com.kotensky.testskfacebook.model.data.ImageListEntity;
 import com.kotensky.testskfacebook.view.fragments.PhotosFragment;
 
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class PhotosGridAdapter extends RecyclerView.Adapter<PhotosGridAdapter.PhotoGridViewHolder> {
 
     private Context context;
-    private List<List<ImageEntity>> photoEntities;
+    private List<ImageListEntity> imageListEntities;
     private OnRecyclerItemClickListener itemClickListener;
 
-    public PhotosGridAdapter(Context context, List<List<ImageEntity>> photoEntities, OnRecyclerItemClickListener itemClickListener) {
+    public PhotosGridAdapter(Context context, List<ImageListEntity> imageListEntities, OnRecyclerItemClickListener itemClickListener) {
         this.context = context;
-        this.photoEntities = photoEntities;
+        this.imageListEntities = imageListEntities;
         this.itemClickListener = itemClickListener;
     }
 
@@ -40,23 +42,24 @@ public class PhotosGridAdapter extends RecyclerView.Adapter<PhotosGridAdapter.Ph
 
     @Override
     public void onBindViewHolder(PhotoGridViewHolder holder, int position) {
-        List<ImageEntity> imageEntities = photoEntities.get(position);
+        ImageListEntity imageListEntity = imageListEntities.get(position);
         Glide.with(context)
-                .load(imageEntities.get(imageEntities.size() - 1).getSource())
+                .load(imageListEntity.getImages().get(imageListEntity.getImages().size() - 1).getSource())
                 .apply(RequestOptions.centerCropTransform())
                 .into(holder.img);
     }
 
     @Override
     public int getItemCount() {
-        return photoEntities.size();
+        return imageListEntities.size();
     }
 
-    public class PhotoGridViewHolder extends RecyclerView.ViewHolder {
+    class PhotoGridViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.grid_item_img)
         ImageView img;
-        public PhotoGridViewHolder(View itemView) {
+        PhotoGridViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

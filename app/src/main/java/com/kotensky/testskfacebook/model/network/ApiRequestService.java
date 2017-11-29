@@ -2,6 +2,7 @@ package com.kotensky.testskfacebook.model.network;
 
 import com.kotensky.testskfacebook.model.data.AlbumEntity;
 import com.kotensky.testskfacebook.model.data.ImageEntity;
+import com.kotensky.testskfacebook.model.data.ImageListEntity;
 import com.kotensky.testskfacebook.model.data.ResponseEntity;
 
 import java.util.List;
@@ -26,10 +27,10 @@ public interface ApiRequestService {
 
 
     @GET(NetworkVariables.ALBUM_PHOTOS)
-    Observable<Response<ResponseEntity<List<ImageEntity>>>> getPhotosInAlbum(@Path("album-id") String albumId,
-                                                                             @Query("access_token") String accessToken,
-                                                                             @Query("fields") String fields);
+    Observable<Response<ResponseEntity<ImageListEntity>>> getPhotosInAlbum(@Path("album-id") String albumId,
+                                                                           @Query("access_token") String accessToken,
+                                                                           @Query("fields") String fields);
 
     @GET()
-    Observable<Response<ResponseEntity<List<ImageEntity>>>> getPhotosInAlbumByUrl(@Url() String url);
+    Observable<Response<ResponseEntity<ImageListEntity>>> getPhotosInAlbumByUrl(@Url() String url);
 }

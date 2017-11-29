@@ -20,8 +20,11 @@ import com.kotensky.testskfacebook.R;
 import com.kotensky.testskfacebook.listeners.OnRecyclerItemClickListener;
 import com.kotensky.testskfacebook.model.data.AlbumEntity;
 import com.kotensky.testskfacebook.model.data.ImageEntity;
+import com.kotensky.testskfacebook.model.data.ImageListEntity;
 import com.kotensky.testskfacebook.model.data.ResponseEntity;
 import com.kotensky.testskfacebook.presenter.PhotosPresenter;
+import com.kotensky.testskfacebook.utils.AppHelper;
+import com.kotensky.testskfacebook.utils.customViews.ItemDecorationAlbumColumns;
 import com.kotensky.testskfacebook.view.adapter.PhotosGridAdapter;
 import com.kotensky.testskfacebook.view.fragments.view.PhotosView;
 
@@ -31,7 +34,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PhotosFragment extends Fragment implements PhotosView, SwipeRefreshLayout.OnRefreshListener, OnRecyclerItemClickListener {
+public class PhotosFragment extends Fragment
+        implements PhotosView, SwipeRefreshLayout.OnRefreshListener, OnRecyclerItemClickListener {
 
     private static final int SPAN_COUNT = 4;
 
@@ -54,8 +58,8 @@ public class PhotosFragment extends Fragment implements PhotosView, SwipeRefresh
     private AlbumEntity albumEntity;
     private PhotosPresenter photosPresenter;
     private PhotosGridAdapter photosGridAdapter;
-    private ResponseEntity<List<ImageEntity>> responseEntity;
-    private List<List<ImageEntity>> photoEntities = new ArrayList<>();
+    private ResponseEntity<ImageListEntity> responseEntity;
+    private List<ImageListEntity> imageListEntity = new ArrayList<>();
     private boolean isLoadingNextPage = true;
     private int pastVisibleItems, visibleItemCount, totalItemCount;
 
@@ -72,7 +76,8 @@ public class PhotosFragment extends Fragment implements PhotosView, SwipeRefresh
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_photos, container, false);
         ButterKnife.bind(this, view);
         setupDefaultValues();
@@ -88,9 +93,12 @@ public class PhotosFragment extends Fragment implements PhotosView, SwipeRefresh
 
     private void setupRecyclerView() {
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), SPAN_COUNT);
-        photosGridAdapter = new PhotosGridAdapter(getContext(), photoEntities, this);
+        photosGridAdapter = new PhotosGridAdapter(getContext(), imageListEntity, this);
         recyclerViewGridPhotos.setLayoutManager(layoutManager);
         recyclerViewGridPhotos.setAdapter(photosGridAdapter);
+        recyclerViewGridPhotos.addItemDecoration(
+                new ItemDecorationAlbumColumns((int) AppHelper.dipToPixels(getContext(), 4),
+                        SPAN_COUNT));
         recyclerViewGridPhotos.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -126,10 +134,10 @@ public class PhotosFragment extends Fragment implements PhotosView, SwipeRefresh
     }
 
     @Override
-    public void onResponseObtained(ResponseEntity<List<ImageEntity>> body, boolean isFirstPage) {
+    public void onResponseObtained(ResponseEntity<ImageListEntity> body, boolean isFirstPage) {
         this.responseEntity = body;
-        if (isFirstPage) photoEntities.clear();
-        photoEntities.addAll(responseEntity.getData());
+        if (isFirstPage) imageListEntity.clear();
+        imageListEntity.addAll(responseEntity.getData());
         photosGridAdapter.notifyDataSetChanged();
         isLoadingNextPage = false;
     }

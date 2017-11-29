@@ -7,7 +7,7 @@ public class AlbumEntity {
     @SerializedName("id")
     private String id;
     @SerializedName("cover_photo")
-    private CoverPhotoEntity coverPhoto;
+    private ImageListEntity coverPhoto;
     @SerializedName("name")
     private String name;
     @SerializedName("created_time")
@@ -18,7 +18,7 @@ public class AlbumEntity {
         return id;
     }
 
-    public CoverPhotoEntity getCoverPhoto() {
+    public ImageListEntity getCoverPhoto() {
         return coverPhoto;
     }
 

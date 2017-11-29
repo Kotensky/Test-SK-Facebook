@@ -1,6 +1,7 @@
 package com.kotensky.testskfacebook.presenter;
 
 import com.kotensky.testskfacebook.model.data.ImageEntity;
+import com.kotensky.testskfacebook.model.data.ImageListEntity;
 import com.kotensky.testskfacebook.model.data.ResponseEntity;
 import com.kotensky.testskfacebook.model.network.ApiFactory;
 import com.kotensky.testskfacebook.model.network.NetworkVariables;
@@ -39,18 +40,18 @@ public class PhotosPresenter extends BasePresenter<PhotosView> {
         getPhotos(ApiFactory.getApiRequestService().getPhotosInAlbumByUrl(nextUrl), false);
     }
 
-    private void getPhotos(Observable<Response<ResponseEntity<List<ImageEntity>>>> photosObservable, boolean isFirst) {
+    private void getPhotos(Observable<Response<ResponseEntity<ImageListEntity>>> photosObservable, boolean isFirst) {
         getView().showLoading();
         photosObservable
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Response<ResponseEntity<List<ImageEntity>>>>() {
+                .subscribe(new Observer<Response<ResponseEntity<ImageListEntity>>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onNext(@NonNull Response<ResponseEntity<List<ImageEntity>>> responseEntityPhotos) {
+                    public void onNext(@NonNull Response<ResponseEntity<ImageListEntity>> responseEntityPhotos) {
                         if (responseEntityPhotos.isSuccessful()) {
                             getView().onResponseObtained(responseEntityPhotos.body(), isFirst);
                         } else {
