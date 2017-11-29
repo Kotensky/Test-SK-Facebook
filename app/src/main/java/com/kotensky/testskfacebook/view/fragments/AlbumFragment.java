@@ -19,8 +19,8 @@ import com.kotensky.testskfacebook.model.data.AlbumEntity;
 import com.kotensky.testskfacebook.model.data.ResponseEntity;
 import com.kotensky.testskfacebook.presenter.AlbumsPresenter;
 import com.kotensky.testskfacebook.view.activities.MainActivity;
-import com.kotensky.testskfacebook.view.activities.view.AlbumsView;
 import com.kotensky.testskfacebook.view.adapter.AlbumsAdapter;
+import com.kotensky.testskfacebook.view.fragments.view.AlbumsView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +104,7 @@ public class AlbumFragment extends Fragment implements AlbumsView, SwipeRefreshL
         if (isFirstPage) albumEntities.clear();
         albumEntities.addAll(responseEntity.getData());
         albumsAdapter.notifyDataSetChanged();
-
+        isLoadingNextPage = false;
     }
 
     @Override

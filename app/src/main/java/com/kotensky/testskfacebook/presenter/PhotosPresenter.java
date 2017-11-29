@@ -1,12 +1,14 @@
 package com.kotensky.testskfacebook.presenter;
 
-
-import com.kotensky.testskfacebook.model.data.AlbumEntity;
+import com.kotensky.testskfacebook.model.data.ImageEntity;
 import com.kotensky.testskfacebook.model.data.ResponseEntity;
 import com.kotensky.testskfacebook.model.network.ApiFactory;
 import com.kotensky.testskfacebook.model.network.NetworkVariables;
 import com.kotensky.testskfacebook.utils.SharedPreferencesManager;
-import com.kotensky.testskfacebook.view.fragments.view.AlbumsView;
+
+import com.kotensky.testskfacebook.view.fragments.view.PhotosView;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -16,41 +18,43 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import retrofit2.Response;
 
-public class AlbumsPresenter extends BasePresenter<AlbumsView> {
+public class PhotosPresenter extends BasePresenter<PhotosView> {
 
     private CompositeDisposable compositeDisposable;
 
-    public AlbumsPresenter(AlbumsView view) {
+    public PhotosPresenter(PhotosView view) {
         setView(view);
         compositeDisposable = new CompositeDisposable();
     }
 
-    public void getAlbumsFirstPage(){
-        getAlbums(ApiFactory.getApiRequestService()
-                .getProfileAlbums(SharedPreferencesManager.getAccessToken(), NetworkVariables.ALBUM_FIELDS), true);
+    public void getPhotosFirstPage(String albumId) {
+        getPhotos(ApiFactory.getApiRequestService()
+                .getPhotosInAlbum(albumId == null ? "me" : albumId,
+                        SharedPreferencesManager.getAccessToken(),
+                        NetworkVariables.IMAGES_FIELD), true);
 
     }
 
-    public void getAlbumsNextPage(String nextUrl){
-        getAlbums(ApiFactory.getApiRequestService().getProfileAlbumsByUrl(nextUrl), false);
+    public void getPhotosNextPage(String nextUrl) {
+        getPhotos(ApiFactory.getApiRequestService().getPhotosInAlbumByUrl(nextUrl), false);
     }
 
-    private void getAlbums(Observable<Response<ResponseEntity<AlbumEntity>>> profileAlbumsObservable, boolean isFirst) {
+    private void getPhotos(Observable<Response<ResponseEntity<List<ImageEntity>>>> photosObservable, boolean isFirst) {
         getView().showLoading();
-        profileAlbumsObservable
+        photosObservable
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Response<ResponseEntity<AlbumEntity>>>() {
+                .subscribe(new Observer<Response<ResponseEntity<List<ImageEntity>>>>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onNext(@NonNull Response<ResponseEntity<AlbumEntity>> responseEntityAlbums) {
-                        if (responseEntityAlbums.isSuccessful()) {
-                            getView().onResponseObtained(responseEntityAlbums.body(), isFirst);
+                    public void onNext(@NonNull Response<ResponseEntity<List<ImageEntity>>> responseEntityPhotos) {
+                        if (responseEntityPhotos.isSuccessful()) {
+                            getView().onResponseObtained(responseEntityPhotos.body(), isFirst);
                         } else {
-                            getView().showErrorMessage("Error: " + responseEntityAlbums.code() + " " + responseEntityAlbums.message());
+                            getView().showErrorMessage("Error: " + responseEntityPhotos.code() + " " + responseEntityPhotos.message());
                         }
                     }
 
@@ -65,6 +69,7 @@ public class AlbumsPresenter extends BasePresenter<AlbumsView> {
                         getView().hideLoading();
                     }
                 });
+
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.kotensky.testskfacebook.view.activities.view;
+package com.kotensky.testskfacebook.view.fragments.view;
 
 
 import com.kotensky.testskfacebook.model.data.AlbumEntity;
