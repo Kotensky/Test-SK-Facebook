@@ -47,6 +47,7 @@ public class PhotosGridAdapter extends RecyclerView.Adapter<PhotosGridAdapter.Ph
                 .load(imageListEntity.getImages().get(imageListEntity.getImages().size() - 1).getSource())
                 .apply(RequestOptions.centerCropTransform())
                 .into(holder.img);
+        holder.itemView.setOnClickListener(view -> itemClickListener.onClick(position));
     }
 
     @Override
