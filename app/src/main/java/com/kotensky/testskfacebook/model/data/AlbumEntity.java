@@ -18,6 +18,10 @@ public class AlbumEntity {
         return id;
     }
 
+    public CoverPhotoEntity getCoverPhoto() {
+        return coverPhoto;
+    }
+
     public String getName() {
         return name;
     }

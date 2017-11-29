@@ -3,4 +3,14 @@
 
     <string name="facebook_app_id">1667775789952464</string>
     <string name="fb_login_protocol_scheme">fb1667775789952464</string>
+    <string name="canceled">Canceled</string>
+    <string name="option_logout">Logout</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="logout_dialog_title">Logout</string>
+    <string name="logout_dialog_content">You want to log out?</string>
+    <string name="login_title">Login</string>
+    <string name="login_content">To use this application, you must be logged in</string>
+    <string name="lets_go">Lest go!</string>
+    <string name="close_app">Close app</string>
 </resources>

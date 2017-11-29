@@ -9,6 +9,4 @@ public interface BaseView {
 
     void showErrorMessage(String error);
 
-    void showLoginScreen();
-
 }

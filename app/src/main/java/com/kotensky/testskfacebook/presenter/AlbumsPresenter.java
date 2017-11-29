@@ -6,6 +6,7 @@ import android.util.Log;
 import com.kotensky.testskfacebook.model.data.AlbumEntity;
 import com.kotensky.testskfacebook.model.data.ResponseEntity;
 import com.kotensky.testskfacebook.model.network.ApiFactory;
+import com.kotensky.testskfacebook.model.network.NetworkVariables;
 import com.kotensky.testskfacebook.utils.SharedPreferencesManager;
 import com.kotensky.testskfacebook.view.activities.view.AlbumsView;
 
@@ -27,20 +28,16 @@ public class AlbumsPresenter extends BasePresenter<AlbumsView> {
     }
 
     public void getAlbumsFirstPage(){
-        if (SharedPreferencesManager.getAccessToken() == null) {
-            getView().showLoginScreen();
-            return;
-        }
         getAlbums(ApiFactory.getApiRequestService()
-                .getProfileAlbums(SharedPreferencesManager.getAccessToken(),"cover_photo{images},created_time,name"));
+                .getProfileAlbums(SharedPreferencesManager.getAccessToken(), NetworkVariables.ALBUM_FIELDS), true);
 
     }
 
     public void getAlbumsNextPage(String nextUrl){
-        getAlbums(ApiFactory.getApiRequestService().getProfileAlbumsByUrl(nextUrl));
+        getAlbums(ApiFactory.getApiRequestService().getProfileAlbumsByUrl(nextUrl), false);
     }
 
-    private void getAlbums(Observable<Response<ResponseEntity<AlbumEntity>>> profileAlbumsObservable) {
+    private void getAlbums(Observable<Response<ResponseEntity<AlbumEntity>>> profileAlbumsObservable, boolean isFirst) {
         getView().showLoading();
         profileAlbumsObservable
                 .observeOn(AndroidSchedulers.mainThread())
@@ -53,7 +50,7 @@ public class AlbumsPresenter extends BasePresenter<AlbumsView> {
                     @Override
                     public void onNext(@NonNull Response<ResponseEntity<AlbumEntity>> responseEntityAlbums) {
                         if (responseEntityAlbums.isSuccessful()) {
-                            getView().onResponseObtained(responseEntityAlbums.body());
+                            getView().onResponseObtained(responseEntityAlbums.body(), isFirst);
                         } else {
                             getView().showErrorMessage("Error: " + responseEntityAlbums.code() + " " + responseEntityAlbums.message());
                         }

@@ -7,5 +7,5 @@ import com.kotensky.testskfacebook.view.BaseView;
 
 public interface AlbumsView extends BaseView {
 
-    void onResponseObtained(ResponseEntity<AlbumEntity> body);
+    void onResponseObtained(ResponseEntity<AlbumEntity> body, boolean isFirstPage);
 }

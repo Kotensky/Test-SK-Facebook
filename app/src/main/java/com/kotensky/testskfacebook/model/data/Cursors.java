@@ -2,7 +2,7 @@ package com.kotensky.testskfacebook.model.data;
 
 import com.google.gson.annotations.SerializedName;
 
-class Cursors {
+public class Cursors {
 
     @SerializedName("after")
     private String after;
